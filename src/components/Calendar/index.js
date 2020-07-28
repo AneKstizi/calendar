@@ -2,6 +2,7 @@ import React from "react";
 import classnames from "classnames";
 
 import * as calendar from "./calendar";
+import events from "../../events";
 
 import "./index.scss";
 
@@ -68,7 +69,8 @@ export default class Calendar extends React.Component {
 
   handleDayClick = (date) => {
     this.setState({ selectedDate: date });
-
+    const event = events(date.toLocaleDateString());
+    console.log(event);
     this.props.onChange(date);
   };
 
@@ -80,13 +82,19 @@ export default class Calendar extends React.Component {
 
     return (
       <div className="calendar">
-        <header>
-          <button onClick={this.handlePrevMonthButtonClick}>{"<"}</button>
+        <header className="calendar_header">
+          <button
+            className="calendar_btn"
+            onClick={this.handlePrevMonthButtonClick}
+          >
+            {"<"}
+          </button>
 
           <select
             ref={(element) => (this.monthSelect = element)}
             value={this.month}
             onChange={this.handleSelectChange}
+            className="calendar_select"
           >
             {monthNames.map((name, index) => (
               <option key={name} value={index}>
@@ -99,6 +107,7 @@ export default class Calendar extends React.Component {
             ref={(element) => (this.yearSelect = element)}
             value={this.year}
             onChange={this.handleSelectChange}
+            className="calendar_select"
           >
             {years.map((year) => (
               <option key={year} value={year}>
@@ -107,33 +116,46 @@ export default class Calendar extends React.Component {
             ))}
           </select>
 
-          <button onClick={this.handleNextMonthButtonClick}>{">"}</button>
+          <button
+            className="calendar_btn"
+            onClick={this.handleNextMonthButtonClick}
+          >
+            {">"}
+          </button>
         </header>
 
-        <table>
+        <table className="calendar_table">
           <thead>
             <tr>
               {weekDayNames.map((name) => (
-                <th key={name}>{name}</th>
+                <th className="calendar_th" key={name}>
+                  {name}
+                </th>
               ))}
             </tr>
           </thead>
 
           <tbody>
             {monthData.map((week, index) => (
-              <tr key={index} className="week">
+              <tr key={index} className="calendar_week">
                 {week.map((date, index) =>
                   date ? (
-                    <td
-                      key={index}
-                      className={classnames("day", {
-                        today: calendar.areEqual(date, currentDate),
-                        selected: calendar.areEqual(date, selectedDate),
-                      })}
-                      onClick={() => this.handleDayClick(date)}
-                    >
-                      {date.getDate()}
-                    </td>
+                    <>
+                      <td
+                        key={index}
+                        className={classnames("calendar_day", {
+                          today: calendar.areEqual(date, currentDate),
+                          selected: calendar.areEqual(date, selectedDate),
+                        })}
+                        onClick={() => this.handleDayClick(date)}
+                      >
+                        {date.getDate()}
+
+                        <span className="calendar_count-events">
+                          {events(date.toLocaleDateString())?.length}
+                        </span>
+                      </td>
+                    </>
                   ) : (
                     <td key={index} />
                   )

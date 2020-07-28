@@ -1,52 +1,78 @@
-.calendar header {
+.calendar {
+  &_header {
     display: flex;
     justify-content: center;
     margin-bottom: 8px;
-}
+  }
 
-.calendar header button,
-.calendar header select {
+  &_btn {
     margin: 0 4px;
-}
+  }
 
-.calendar table {
+  &_select {
+    margin: 0 4px;
+  }
+
+  &_table {
     table-layout: fixed;
     border-collapse: separate;
     border-spacing: 0;
     margin: auto;
-}
+  }
 
-.calendar th {
+  &_th {
     vertical-align: middle;
     text-align: center;
     height: 36px;
-}
+  }
 
-.calendar .day {
-    padding: 4px 8px;
+  &_day {
+    padding: 16px 33px;
     vertical-align: middle;
     text-align: center;
     border: 2px solid transparent;
-}
+    position: relative;
 
-.calendar .day:hover {
-    background-color: #eaeaea;
-    cursor: pointer;
-}
+    &:hover {
+      background-color: #eaeaea;
+      cursor: pointer;
+    }
 
-.calendar .day.selected {
-    border: 2px solid dodgerblue;
-}
+    .selected {
+      border: 2px solid dodgerblue;
+    }
 
-.calendar .day.today {
-    background-color: dodgerblue;
-    color: white;
-}
+    .today {
+      background-color: dodgerblue;
+      color: white;
 
-.calendar .day.today:hover {
-    background-color: #0081ff;
-}
+      &:hover {
+        background-color: #0081ff;
+      }
+    }
 
-.calendar .day.today.selected {
-    border: 2px solid lightgray;
+    .selected {
+      border: 2px solid lightgray;
+    }
+  }
+
+  &_wrapper {
+    display: inline-block;
+  }
+
+  &_count-events {
+    position: absolute;
+    right: 0;
+    font-size: 12px;
+  }
+
+  &_count-events {
+    position: absolute;
+    top: 4px;
+    right: 5px;
+    font-size: 14px;
+    background-color: rgba(0, 0, 0, .6);
+    text-align: center;
+    color: #fff;
+  }
 }
