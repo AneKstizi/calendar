@@ -12,7 +12,12 @@ body {
     align-items: center;
 }
 
-button, select {
+* {
+    box-sizing: border-box;
+}
+
+button,
+select {
     height: 2em;
     font-size: 1rem;
     background-color: #fff;
@@ -22,7 +27,8 @@ button, select {
     cursor: pointer;
 }
 
-button:focus, select:focus {
+button:focus,
+select:focus {
     outline: none;
 }
 

@@ -1,0 +1,52 @@
+.calendar-day {
+  width: 110px;
+  height: 60px;
+  vertical-align: middle;
+  font-size: 30px;
+  font-weight: 300;
+  color: #333333;
+  text-align: center;
+  position: relative;
+  border: 1px solid #cccccc;
+
+  &:hover {
+    background-color: #a09f9f;
+    cursor: pointer;
+  }
+
+  &--selected {
+    background-color: #666666;
+    color: #efefef;
+  }
+
+  &--today {
+    background-color: rgb(113, 204, 81);
+    color: white;
+
+    &:hover {
+      background-color: rgba(113, 204, 81, .7);
+    }
+  }
+
+  &_empty-day {
+    vertical-align: middle;
+    font-size: 30px;
+    font-weight: 300;
+    text-align: center;
+    border: 1px solid #cccccc;
+  }
+
+  &_count-events {
+    position: absolute;
+    top: 0px;
+    left: 0;
+    width: 33px;
+    height: 33px;
+    font-size: 30px;
+    background-color: #000000;
+    color: #fff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

@@ -1,43 +1,34 @@
 export default (date) => {
   const events = {
-    "29.07.2020": [
-      {
-        eventsName: "Турнир по покеру",
-        numberOfParticipants: 5,
-      },
-      {
-        eventsName: "Казино",
-        numberOfParticipants: 5,
-      },
-    ],
-    "01.08.2020": [
-      {
-        eventsName: "Турнир по покеру",
-        numberOfParticipants: 5,
-      },
-      {
-        eventsName: "Турнир по покеру",
-        numberOfParticipants: 5,
-      },
-      {
-        eventsName: "Турнир по покеру",
-        numberOfParticipants: 5,
-      },
-    ],
     "05.08.2020": [
       {
         eventsName: "Турнир по покеру",
+        startTime: "21:00",
+        endTime: "13:30",
+        startDate: "13.08.2020",
+        endDate: "13.08.2020",
         numberOfParticipants: 5,
+        hex: "#b91d38",
+      },
+      {
+        eventsName: "Казино",
+        startTime: "21:00",
+        endTime: "13:30",
+        startDate: "13.08.2020",
+        endDate: "13.08.2020",
+        numberOfParticipants: 5,
+        hex: "#5ca5ad",
       },
     ],
-    "10.08.2020": [
+    "09.08.2020": [
       {
-        eventsName: "Турнир по покеру",
+        eventsName: "Тест",
+        startTime: "21:00",
+        endTime: "13:30",
+        startDate: "13.08.2020",
+        endDate: "13.08.2020",
         numberOfParticipants: 5,
-      },
-      {
-        eventsName: "Турнир по покеру",
-        numberOfParticipants: 5,
+        hex: "pink",
       },
     ],
   };

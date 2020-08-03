@@ -3,13 +3,16 @@ import classnames from "classnames";
 
 import * as calendar from "./calendar";
 import events from "../../events";
+import FilterDay from "../FilterDay";
+import CalendarDay from "./components/CalendarDay";
+import EventList from "../EventList";
 
 import "./index.scss";
 
 export default class Calendar extends React.Component {
   static defaultProps = {
     date: new Date(),
-    years: [2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019, 2020],
+    years: [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030],
     monthNames: [
       "Январь",
       "Февраль",
@@ -32,6 +35,7 @@ export default class Calendar extends React.Component {
     date: this.props.date,
     currentDate: new Date(),
     selectedDate: null,
+    currentEvent: [],
   };
 
   get year() {
@@ -70,100 +74,75 @@ export default class Calendar extends React.Component {
   handleDayClick = (date) => {
     this.setState({ selectedDate: date });
     const event = events(date.toLocaleDateString());
-    console.log(event);
+    this.setState({ currentEvent: event });
     this.props.onChange(date);
   };
 
   render() {
     const { years, monthNames, weekDayNames } = this.props;
-    const { currentDate, selectedDate } = this.state;
+    const { currentDate, selectedDate, currentEvent } = this.state;
 
     const monthData = calendar.getMonthData(this.year, this.month);
 
     return (
       <div className="calendar">
-        <header className="calendar_header">
-          <button
-            className="calendar_btn"
-            onClick={this.handlePrevMonthButtonClick}
-          >
-            {"<"}
-          </button>
+        <div className="calendar_inner">
+          <header className="calendar_header">
+            <FilterDay
+              value={this.month}
+              change={this.handleSelectChange}
+              className="calendar_select"
+              options={monthNames}
+              link={(element) => (this.monthSelect = element)}
+            />
 
-          <select
-            ref={(element) => (this.monthSelect = element)}
-            value={this.month}
-            onChange={this.handleSelectChange}
-            className="calendar_select"
-          >
-            {monthNames.map((name, index) => (
-              <option key={name} value={index}>
-                {name}
-              </option>
-            ))}
-          </select>
+            <FilterDay
+              value={this.year}
+              change={this.handleSelectChange}
+              className="calendar_select"
+              options={years}
+              link={(element) => (this.yearSelect = element)}
+              filter={true}
+            />
+          </header>
 
-          <select
-            ref={(element) => (this.yearSelect = element)}
-            value={this.year}
-            onChange={this.handleSelectChange}
-            className="calendar_select"
-          >
-            {years.map((year) => (
-              <option key={year} value={year}>
-                {year}
-              </option>
-            ))}
-          </select>
-
-          <button
-            className="calendar_btn"
-            onClick={this.handleNextMonthButtonClick}
-          >
-            {">"}
-          </button>
-        </header>
-
-        <table className="calendar_table">
-          <thead>
-            <tr>
-              {weekDayNames.map((name) => (
-                <th className="calendar_th" key={name}>
-                  {name}
-                </th>
-              ))}
-            </tr>
-          </thead>
-
-          <tbody>
-            {monthData.map((week, index) => (
-              <tr key={index} className="calendar_week">
-                {week.map((date, index) =>
-                  date ? (
-                    <>
-                      <td
-                        key={index}
-                        className={classnames("calendar_day", {
-                          today: calendar.areEqual(date, currentDate),
-                          selected: calendar.areEqual(date, selectedDate),
-                        })}
-                        onClick={() => this.handleDayClick(date)}
-                      >
-                        {date.getDate()}
-
-                        <span className="calendar_count-events">
-                          {events(date.toLocaleDateString())?.length}
-                        </span>
-                      </td>
-                    </>
-                  ) : (
-                    <td key={index} />
-                  )
-                )}
+          <table className="calendar_table">
+            <thead>
+              <tr>
+                {weekDayNames.map((name) => (
+                  <th className="calendar_th" key={name}>
+                    {name}
+                  </th>
+                ))}
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+
+            <tbody>
+              {monthData.map((week, index) => (
+                <tr key={index} className="calendar_week">
+                  {week.map((date, index) => (
+                    <CalendarDay
+                      key={index}
+                      date={date}
+                      className={classnames("calendar-day", {
+                        "calendar-day--today": calendar.areEqual(
+                          date,
+                          currentDate
+                        ),
+                        "calendar-day--selected": calendar.areEqual(
+                          date,
+                          selectedDate
+                        ),
+                      })}
+                      onClick={() => this.handleDayClick(date)}
+                    />
+                  ))}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+        <EventList currentEvent={currentEvent} selectedDate={selectedDate} />
       </div>
     );
   }
