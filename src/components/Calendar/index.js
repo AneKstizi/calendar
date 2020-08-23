@@ -1,17 +1,22 @@
 import React from "react";
+import { connect } from "react-redux";
+
 import classnames from "classnames";
 
 import * as calendar from "./calendar";
 import events from "../../events";
 import FilterDay from "../FilterDay";
+import FilterDayEvents from "../FilterDay/FilterDayEvents";
 import CalendarDay from "./components/CalendarDay";
 import EventList from "../EventList";
+import { event } from "../../constants";
+import { add, selectedDate, addEvent } from "../../redux/actions/actions";
 
 import "./index.scss";
 
-export default class Calendar extends React.Component {
+class Calendar extends React.Component {
   static defaultProps = {
-    date: new Date(),
+    // date: new Date(),
     years: [2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030],
     monthNames: [
       "Январь",
@@ -32,58 +37,61 @@ export default class Calendar extends React.Component {
   };
 
   state = {
-    date: this.props.date,
-    currentDate: new Date(),
-    selectedDate: null,
-    currentEvent: [],
+    // date: this.props.date,
+    // currentDate: new Date(),
+    // selectedDate: null,
+    // currentEvent: [],
   };
 
   get year() {
-    return this.state.date.getFullYear();
+    return this.props.date.getFullYear();
   }
 
   get month() {
-    return this.state.date.getMonth();
+    return this.props.date.getMonth();
   }
 
   get day() {
-    return this.state.date.getDate();
+    return this.props.date.getDate();
   }
 
   handlePrevMonthButtonClick = () => {
     const date = new Date(this.year, this.month - 1);
-
-    this.setState({ date });
+    this.props.onAdd(date);
   };
 
   handleNextMonthButtonClick = () => {
     const date = new Date(this.year, this.month + 1);
 
-    this.setState({ date });
+    this.props.onAdd(date);
   };
 
   handleSelectChange = () => {
     const year = this.yearSelect.value;
     const month = this.monthSelect.value;
-
     const date = new Date(year, month);
 
-    this.setState({ date });
+    this.props.onAdd(date);
   };
 
   handleDayClick = (date) => {
-    this.setState({ selectedDate: date });
+    this.props.onSub(date);
     const event = events(date.toLocaleDateString());
-    this.setState({ currentEvent: event });
-    this.props.onChange(date);
+    this.props.onEvent(event);
   };
 
   render() {
-    const { years, monthNames, weekDayNames } = this.props;
-    const { currentDate, selectedDate, currentEvent } = this.state;
+    const {
+      years,
+      monthNames,
+      weekDayNames,
+      currentDate,
+      selectedDate,
+      currentEvent,
+    } = this.props;
 
     const monthData = calendar.getMonthData(this.year, this.month);
-
+    console.log("props", this.props);
     return (
       <div className="calendar">
         <div className="calendar_inner">
@@ -95,13 +103,20 @@ export default class Calendar extends React.Component {
               options={monthNames}
               link={(element) => (this.monthSelect = element)}
             />
-
             <FilterDay
               value={this.year}
               change={this.handleSelectChange}
               className="calendar_select"
               options={years}
               link={(element) => (this.yearSelect = element)}
+              filter={true}
+            />
+            <FilterDayEvents
+              value={this.month}
+              change={this.handleSelectChange}
+              className="calendar_select"
+              options={event}
+              link={(element) => (this.monthSelect = element)}
               filter={true}
             />
           </header>
@@ -147,3 +162,22 @@ export default class Calendar extends React.Component {
     );
   }
 }
+
+function mapStateToProps(state) {
+  return {
+    date: state.date.date,
+    currentDate: state.date.currentDate,
+    selectedDate: state.date.selectedDate,
+    currentEvent: state.date.currentEvent,
+  };
+}
+
+function mapDispatchToProps(dispatch) {
+  return {
+    onAdd: (date) => dispatch(add(date)),
+    onSub: (date) => dispatch(selectedDate(date)),
+    onEvent: (event) => dispatch(addEvent(event)),
+  };
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(Calendar);

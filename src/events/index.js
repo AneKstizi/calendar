@@ -20,7 +20,7 @@ export default (date) => {
         hex: "#5ca5ad",
       },
     ],
-    "09.08.2020": [
+    "09.09.2020": [
       {
         eventsName: "Тест",
         startTime: "21:00",
